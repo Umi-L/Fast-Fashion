@@ -50,11 +50,14 @@
      <Folder Include="Assets" />
      <Folder Include="Assets/Animations" />
      <Folder Include="Assets/Scripts" />
+     <Folder Include="Assets/Resources/Items" />
      <Folder Include="Assets/Models" />
      <Folder Include="Assets/Prefabs" />
      <Folder Include="Assets/Materials" />
      <Folder Include="Assets/Scenes" />
+     <Folder Include="Assets/Models/Items" />
      <Folder Include="Assets/Textures" />
+     <Folder Include="Assets/Resources" />
      <Reference Include="UnityEngine">
      <HintPath>/home/julian/Unity/Hub/Editor/2021.3.17f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
      </Reference>

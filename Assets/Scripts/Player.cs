@@ -100,20 +100,18 @@ public class Player : MonoBehaviour
         foreach (var item in inventory)
         {
             var itemPrefab = Instantiate(Items.GetItemPrefab(item));
-            
-            itemPrefab.transform.SetParent(head.transform);
-
-            itemPrefab.transform.localPosition = new Vector3(0, height, 0);
 
             var combinedBounds = new Bounds();
             var renderers = itemPrefab.GetComponentsInChildren<Renderer>();
             foreach (Renderer render in renderers) {
                 combinedBounds.Encapsulate(render.bounds);
             }
+            
+            itemPrefab.transform.SetParent(head.transform);
 
-            height += combinedBounds.size.y + 0.2f;
+            itemPrefab.transform.localPosition = new Vector3(0, height, 0);
             
-            
+            height += combinedBounds.size.y + 0.5f;
         }
     }
     

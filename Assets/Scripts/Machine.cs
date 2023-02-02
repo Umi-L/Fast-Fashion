@@ -1,19 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
 
 public class Machine : Interactable
 {
     
     [SerializeField] 
-    public CraftingItem[] inputs;
-    public CraftingItem outputItem;
+    public Items.CraftingItem[] inputs;
+    public Items.CraftingItem outputItem;
     public float craftingTime = 5f;
 
-    private List<CraftingItem> outputInventory = new List<CraftingItem>();
-    private List<CraftingItem> inputInventory = new List<CraftingItem>();
+    private List<Items.CraftingItem> outputInventory = new List<Items.CraftingItem>();
+    private List<Items.CraftingItem> inputInventory = new List<Items.CraftingItem>();
 
     private float craftingTimer = 0f;
     
@@ -21,7 +20,7 @@ public class Machine : Interactable
 
     public void StartCrafting()
     {
-        List<CraftingItem> copy = new List<CraftingItem>(inputInventory);
+        List<Items.CraftingItem> copy = new List<Items.CraftingItem>(inputInventory);
         
         //check to see if we have all the items we need
         foreach (var input in inputs)
@@ -46,7 +45,7 @@ public class Machine : Interactable
         craftingTimer = craftingTime;
     }
 
-    public List<CraftingItem> AddItems(List<CraftingItem> items)
+    public List<Items.CraftingItem> AddItems(List<Items.CraftingItem> items)
     {
         Debug.LogFormat("adding items to machine: {0}", items.Count);
         
@@ -71,9 +70,9 @@ public class Machine : Interactable
         outputInventory.Add(outputItem);
     }
     
-    public List<CraftingItem> TakeOutput()
+    public List<Items.CraftingItem> TakeOutput()
     {
-        List<CraftingItem> copy = new List<CraftingItem>(outputInventory);
+        List<Items.CraftingItem> copy = new List<Items.CraftingItem>(outputInventory);
         outputInventory.Clear();
         return copy;
     }

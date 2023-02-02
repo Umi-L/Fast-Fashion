@@ -42,11 +42,11 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets/Scripts/PickupLocation.cs" />
+     <Compile Include="Assets/Scripts/Interactable.cs" />
      <Compile Include="Assets/Scripts/Items.cs" />
      <Compile Include="Assets/Scripts/Machine.cs" />
      <Compile Include="Assets/Scripts/BasicMachine.cs" />
      <Compile Include="Assets/Scripts/Player.cs" />
-     <Compile Include="Assets/Scripts/Interactable.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/Animations" />
      <Folder Include="Assets/Scripts" />

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEditor;
 using UnityEngine;
 
@@ -33,6 +32,8 @@ public class BasicMachine : Machine
         interactableDisplay.transform.rotation = camRotation;
 
         player = GameObject.FindWithTag("Player");
+        
+        base.HideAllInteractionPoints();
     }
 
     private void Update()
@@ -49,9 +50,10 @@ public class BasicMachine : Machine
             case 0:
                 // interact with input
                 
-                //add player inventory to machine inventory
+                //add player inventory to machine inventory and remove from player inventory
                 var playerScript = player.GetComponent<Player>();
                 playerScript.inventory = base.AddItems(playerScript.inventory);
+                playerScript.UpdateInventory();
                 break;
             case 1:
                 // interact with output
@@ -60,9 +62,7 @@ public class BasicMachine : Machine
                 var playerScript2 = player.GetComponent<Player>();
                 
                 // merge player inventory with base.TakeOutput();
-                playerScript2.inventory.AddRange(base.TakeOutput());
-                
-                print(playerScript2.inventory);
+                playerScript2.AddItemsToInventory(base.TakeOutput());
                 
                 break;
             case 2:

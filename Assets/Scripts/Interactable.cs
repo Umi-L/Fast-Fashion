@@ -8,6 +8,14 @@ public class Interactable : MonoBehaviour
     public Transform[] InteractionPoints;
 
     
+    public void HideAllInteractionPoints()
+    {
+        for (int i = 0; i < InteractionPoints.Length; i++)
+        {
+            HideInteractionPoint(i);
+        }
+    }
+    
     public virtual void Interact(int point)
     {
         Debug.Log("Interacting with " + gameObject.name + " at point " + point);

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -17,9 +16,11 @@ public class Player : MonoBehaviour
     
     private Animator animator;
     
-    public List<CraftingItem> inventory = new List<CraftingItem>();
-
+    public List<Items.CraftingItem> inventory = new List<Items.CraftingItem>();
+    
     float interactionDistance = 3.0f;
+
+    private GameObject head;
 
     private Interactable lastFrameInteractable;
     private int lastFrameInteractionPoint = -1;
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
         followerCamera = transform.parent.GetChild(1).gameObject.GetComponent<Camera>();
         
         animator = gameObject.GetComponent<Animator>();
+        head = transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -78,10 +80,41 @@ public class Player : MonoBehaviour
         GetNearbyInteractions();
     }
 
-    public void AddItemsToInventory(List<CraftingItem> items)
+    public void AddItemsToInventory(List<Items.CraftingItem> items)
     {
         //combine items and inventory
         inventory.AddRange(items);
+
+        UpdateInventory();
+    }
+
+    public void UpdateInventory()
+    {
+        //destroy all children of head
+        foreach (Transform child in head.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        float height = 0;
+        foreach (var item in inventory)
+        {
+            var itemPrefab = Instantiate(Items.GetItemPrefab(item));
+            
+            itemPrefab.transform.SetParent(head.transform);
+
+            itemPrefab.transform.localPosition = new Vector3(0, height, 0);
+
+            var combinedBounds = new Bounds();
+            var renderers = itemPrefab.GetComponentsInChildren<Renderer>();
+            foreach (Renderer render in renderers) {
+                combinedBounds.Encapsulate(render.bounds);
+            }
+
+            height += combinedBounds.size.y + 0.2f;
+            
+            
+        }
     }
     
     void GetNearbyInteractions()

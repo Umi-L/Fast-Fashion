@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
 
 public class PickupLocation : Interactable
@@ -9,19 +8,22 @@ public class PickupLocation : Interactable
     private SpriteRenderer spriteRenderer;
     
     [SerializeField] public Sprite billboard;
-    [SerializeField] public CraftingItem item;
+    [SerializeField] public Items.CraftingItem item;
 
     public int ItemCount = 1;
     
     // Start is called before the first frame update
     void Start()
     {
+        base.HideAllInteractionPoints();
+        
         image = transform.GetChild(0).gameObject;
         spriteRenderer = image.GetComponent<SpriteRenderer>();
 
         spriteRenderer.sprite = billboard;
         
         image.transform.rotation = Camera.main.gameObject.transform.rotation;
+        transform.GetChild(0).rotation = Camera.main.gameObject.transform.rotation;
     }
 
     public override void Interact(int point)
@@ -31,7 +33,7 @@ public class PickupLocation : Interactable
         // interact with pickup location
         var player = GameObject.FindWithTag("Player");
         var playerScript = player.GetComponent<Player>();
-        playerScript.AddItemsToInventory(new List<CraftingItem>() {item});
+        playerScript.AddItemsToInventory(new List<Items.CraftingItem>() {item});
     }
     
     public override void DisplayInteractionPoint(int index)

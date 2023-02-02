@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Machine : Interactable
 {
@@ -10,7 +11,10 @@ public class Machine : Interactable
     public Items.CraftingItem[] inputs;
     public Items.CraftingItem outputItem;
     public float craftingTime = 5f;
-
+    public bool toggleable = false;
+    
+    private bool toggled = false;
+    
     private List<Items.CraftingItem> outputInventory = new List<Items.CraftingItem>();
     private List<Items.CraftingItem> inputInventory = new List<Items.CraftingItem>();
 
@@ -41,10 +45,17 @@ public class Machine : Interactable
             inputInventory.Remove(input);
         }
         
+        UpdateDisplay();
+        
         //start crafting
         craftingTimer = craftingTime;
     }
 
+    public float GetCraftingProgress()
+    {
+        return craftingTimer / craftingTime;
+    }
+    
     public List<Items.CraftingItem> AddItems(List<Items.CraftingItem> items)
     {
         Debug.LogFormat("adding items to machine: {0}", items.Count);
@@ -62,18 +73,93 @@ public class Machine : Interactable
                 items.Remove(item);
             }
         }
+        
+        UpdateDisplay();
+        
         return items;
+    }
+
+    public void UpdateDisplay()
+    {
+        for (int i = 0; i < base.InteractionPoints.Length; i++)
+        {
+
+            var interactionPoint = base.InteractionPoints[i];
+            
+            if (interactionPoint.childCount < 2)
+            {
+                continue;
+            }
+            
+            var inventory = interactionPoint.GetChild(1);
+            
+            //destroy all children of head
+            foreach (Transform child in inventory.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            var items = GetInventoryFromInteractionPoint(i);
+            
+            float height = 0;
+            foreach (var item in items)
+            {
+                var itemPrefab = Instantiate(Items.GetItemPrefab(item));
+
+                var combinedBounds = new Bounds();
+                var renderers = itemPrefab.GetComponentsInChildren<Renderer>();
+                foreach (Renderer render in renderers)
+                {
+                    combinedBounds.Encapsulate(render.bounds);
+                }
+
+                itemPrefab.transform.SetParent(inventory);
+
+                itemPrefab.transform.localPosition = new Vector3(0, height, 0);
+
+                height += combinedBounds.size.y + 0.1f;
+            }
+        }
+    }
+
+    public virtual List<Items.CraftingItem> GetInventoryFromInteractionPoint(int point)
+    {
+        switch (point)
+        {
+            case 0:
+                return inputInventory;
+            case 1:
+                return outputInventory;
+            default:
+                return new List<Items.CraftingItem>();
+        }
     }
 
     private void Craft()
     {
         outputInventory.Add(outputItem);
+        UpdateDisplay();
+    }
+
+    public void StartCraftingOrToggle()
+    {
+        if (toggleable)
+        {
+            toggled = !toggled;
+        }
+        else
+        {
+            StartCrafting();
+        }
     }
     
     public List<Items.CraftingItem> TakeOutput()
     {
         List<Items.CraftingItem> copy = new List<Items.CraftingItem>(outputInventory);
         outputInventory.Clear();
+        
+        UpdateDisplay();
+        
         return copy;
     }
 
@@ -86,6 +172,13 @@ public class Machine : Interactable
             {
                 craftingTimer = 0;
                 Craft();
+            }
+        }
+        else
+        {
+            if (toggled)
+            {
+                StartCrafting();
             }
         }
     }

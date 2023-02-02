@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BasicMachine : Machine
 {
@@ -13,6 +14,7 @@ public class BasicMachine : Machine
     private GameObject inputDisplay;
     private GameObject outputDisplay;
     private GameObject interactableDisplay;
+    private GameObject progressDisplay;
 
     private GameObject player;
     
@@ -21,15 +23,17 @@ public class BasicMachine : Machine
         inputDisplay = transform.GetChild(0).gameObject;
         outputDisplay = transform.GetChild(1).gameObject;
         interactableDisplay = transform.GetChild(2).gameObject;
-        
-        inputDisplay.GetComponent<SpriteRenderer>().sprite = WantedItems;
-        outputDisplay.GetComponent<SpriteRenderer>().sprite = OutputItem;
+        progressDisplay = transform.GetChild(3).GetChild(0).gameObject;
+
+        //inputDisplay.GetComponent<SpriteRenderer>().sprite = WantedItems;
+        //outputDisplay.GetComponent<SpriteRenderer>().sprite = OutputItem;
         
         var camRotation = Camera.main.gameObject.transform.rotation;
 
-        inputDisplay.transform.rotation = camRotation;
-        outputDisplay.transform.rotation = camRotation;
-        interactableDisplay.transform.rotation = camRotation;
+        inputDisplay.transform.GetChild(0).rotation = camRotation;
+        outputDisplay.transform.GetChild(0).rotation = camRotation;
+        interactableDisplay.transform.GetChild(0).rotation = camRotation;
+        progressDisplay.transform.rotation = camRotation;
 
         player = GameObject.FindWithTag("Player");
         
@@ -39,6 +43,8 @@ public class BasicMachine : Machine
     private void Update()
     {
         base.UpdateTimer();
+        
+        progressDisplay.GetComponent<Image>().fillAmount = base.GetCraftingProgress();
     }
 
     public override void Interact(int point)
@@ -69,8 +75,8 @@ public class BasicMachine : Machine
                 // interact with machine
                 
                 print("Starting crafting");
-                
-                base.StartCrafting();
+
+                base.StartCraftingOrToggle();
                 
                 break;
             default:
@@ -99,7 +105,7 @@ public class BasicMachine : Machine
                 break;
         }
     }
-    
+
     public override void HideInteractionPoint(int point)
     {
         base.DisplayInteractionPoint(point);

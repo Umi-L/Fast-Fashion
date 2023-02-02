@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,11 +11,29 @@ public class Player : MonoBehaviour
     private bool groundedPlayer;
     private float playerSpeed = 5.0f;
     private float gravityValue = -9.81f;
+    
+    private Camera followerCamera;
+    private Vector3 offset = new Vector3(0, 10, -10);
+    
+    private Animator animator;
+    
+    public List<CraftingItem> inventory = new List<CraftingItem>();
+
+    float interactionDistance = 3.0f;
+
+    private Interactable lastFrameInteractable;
+    private int lastFrameInteractionPoint = -1;
 
     // Start is called before the first frame update
     void Start()
     {
+        print("starting player");
+        
         controller = gameObject.GetComponent<CharacterController>();
+
+        followerCamera = transform.parent.GetChild(1).gameObject.GetComponent<Camera>();
+        
+        animator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -36,5 +55,93 @@ public class Player : MonoBehaviour
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+        
+        // if the player is moving, play the walk animation
+        if (Mathf.Abs(move.x) > 0.1 || Mathf.Abs(move.z) > 0.1)
+        {
+            animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false);
+        }
+        
+
+        // if the camera is too far away, move it closer
+        Vector3 distance = ((followerCamera.transform.position - offset) - transform.position);
+        
+        if (Mathf.Abs(distance.x) > 7 || Mathf.Abs(distance.z) > 5)
+        {
+            followerCamera.transform.position = Vector3.Lerp(followerCamera.transform.position, transform.position + offset, 1*Time.deltaTime);
+        }
+
+        GetNearbyInteractions();
+    }
+
+    public void AddItemsToInventory(List<CraftingItem> items)
+    {
+        //combine items and inventory
+        inventory.AddRange(items);
+    }
+    
+    void GetNearbyInteractions()
+    {
+        // get all the interactable objects in the scene
+        GameObject[] interactables = GameObject.FindGameObjectsWithTag("Interactable");
+        
+        float nearestDistance = float.MaxValue;
+        Interactable nearestInteractable = null;
+        int nearestInteractableIndex = 0;
+
+        // for each interactable object
+        foreach (GameObject interactable in interactables)
+        {
+            var interactScript = interactable.GetComponent<Interactable>();
+            
+            foreach (var interactionPoint in interactScript.InteractionPoints)
+            {
+                //get distance between interactionpoint and player
+                float distance = Vector3.Distance(interactionPoint.transform.position, transform.position);
+                
+                // if the distance is less than interactionDistance and less than the nearest distance
+                if (distance < interactionDistance && distance < nearestDistance)
+                {
+                    //set nearest
+                    nearestDistance = distance;
+                    nearestInteractable = interactScript;
+                    nearestInteractableIndex = System.Array.IndexOf(interactScript.InteractionPoints, interactionPoint);
+                }
+            }
+        }
+        
+        if (nearestInteractable != null)
+        {
+            if (lastFrameInteractable != nearestInteractable || lastFrameInteractionPoint != nearestInteractableIndex)
+            {
+                if (lastFrameInteractable != null)
+                {
+                    lastFrameInteractable.HideInteractionPoint(lastFrameInteractionPoint);
+                }
+
+                // display the nearest interaction point
+                nearestInteractable.DisplayInteractionPoint(nearestInteractableIndex);
+
+                lastFrameInteractable = nearestInteractable;
+                lastFrameInteractionPoint = nearestInteractableIndex;
+            }
+        }
+        else if (lastFrameInteractable != null)
+        {
+            lastFrameInteractable.HideInteractionPoint(lastFrameInteractionPoint);
+            lastFrameInteractable = null;
+            lastFrameInteractionPoint = -1;
+        }
+        
+        // if the player presses the interact button
+        if (Input.GetKeyDown(KeyCode.Space) && lastFrameInteractable != null)
+        {
+            // interact with the nearest interaction point
+            lastFrameInteractable.Interact(lastFrameInteractionPoint);
+        }
     }
 }

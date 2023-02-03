@@ -347,6 +347,7 @@
 -r:"Library/Bee/artifacts/2400b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/BasicMachine.cs"
 "Assets/Scripts/Cat.cs"
+"Assets/Scripts/HUD.cs"
 "Assets/Scripts/Interactable.cs"
 "Assets/Scripts/Items.cs"
 "Assets/Scripts/Machine.cs"

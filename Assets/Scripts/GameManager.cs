@@ -15,6 +15,22 @@ public class GameManager : MonoBehaviour
     private float catSpawnTimer = 0f;
 
     private Player player;
+
+    private Quota[][] quotas =
+    {
+        new Quota[]
+        {
+            new () {count = 2, item = Items.CraftingItem.Jeans},
+            new () {count = 5, item = Items.CraftingItem.Cloth},
+            new () {count = 1, item = Items.CraftingItem.Shirt}
+        },
+    };
+
+    struct Quota
+    {
+        public int count;
+        public Items.CraftingItem item;
+    }
     
     private void Awake() 
     { 

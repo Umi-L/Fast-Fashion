@@ -41,6 +41,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            DropAllItems();
+        }
+        
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
         {
@@ -85,6 +91,34 @@ public class Player : MonoBehaviour
         //combine items and inventory
         inventory.AddRange(items);
 
+        UpdateInventory();
+    }
+
+    public bool PointInCamera(Vector3 point)
+    {
+        var focalPoint = (followerCamera.transform.position - offset);
+        
+        var distance = focalPoint - point;
+        
+        if (Mathf.Abs(distance.x) > 13.5 || Mathf.Abs(distance.z) > 10)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public void DropAllItems()
+    {
+        foreach (var item in inventory)
+        {
+            var droppedItemPrefab = Resources.Load<GameObject>("Prefabs/DroppedItem");
+            var droppedItem = Instantiate(droppedItemPrefab);
+            droppedItem.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
+            droppedItem.transform.position = transform.position + new Vector3(0, 2, 0);
+            droppedItem.GetComponent<DroppedItem>().itemType = item;
+        }
+        
+        inventory.Clear();
         UpdateInventory();
     }
 

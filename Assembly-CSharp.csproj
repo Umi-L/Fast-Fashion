@@ -49,6 +49,8 @@
      <Compile Include="Assets/Scripts/Player.cs" />
      <Compile Include="Assets/Scripts/Cat.cs" />
      <Compile Include="Assets/Scripts/HUD.cs" />
+     <Compile Include="Assets/Scripts/GameManager.cs" />
+     <Compile Include="Assets/Scripts/DroppedItem.cs" />
      <Folder Include="Assets" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
@@ -78,6 +80,7 @@
      <Folder Include="Assets/TextMesh Pro/Shaders" />
      <Folder Include="Assets/TextMesh Pro/Resources/Style Sheets" />
      <Folder Include="Assets/TextMesh Pro/Fonts" />
+     <Folder Include="Assets/Resources/Prefabs" />
      <None Include="Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Masking.shader" />
      <Folder Include="Assets/Prefabs" />

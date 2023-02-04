@@ -15,8 +15,10 @@ public class Machine : Interactable
     
     private bool toggled = false;
     
-    private List<Items.CraftingItem> outputInventory = new List<Items.CraftingItem>();
-    private List<Items.CraftingItem> inputInventory = new List<Items.CraftingItem>();
+    public bool isCrafting = false;
+    
+    public List<Items.CraftingItem> outputInventory = new List<Items.CraftingItem>();
+    public List<Items.CraftingItem> inputInventory = new List<Items.CraftingItem>();
 
     private float craftingTimer = 0f;
     
@@ -39,11 +41,22 @@ public class Machine : Interactable
             }
         }
         
+        bool itemRemoved = false;
+        
         //remove only items used in crafting
         foreach (var input in inputs)
         {
             inputInventory.Remove(input);
+            itemRemoved = true;
         }
+        
+        //create small poof effect if item was removed
+        if (itemRemoved)
+        {
+            Instantiate(Resources.Load("Prefabs/SmallPoofEffect"), transform.position, Quaternion.identity);
+        }
+        
+        isCrafting = true;
         
         UpdateDisplay();
         
@@ -78,6 +91,31 @@ public class Machine : Interactable
         
         return items;
     }
+    
+    public List<Items.CraftingItem> AddItem(List<Items.CraftingItem> items)
+    {
+        Debug.LogFormat("adding items to machine: {0}", items.Count);
+        
+        //check if inputs contains items if so add them
+        
+        for (int i = inputs.Length-1; i >= 0; i--)
+        {
+            var item = inputs[i];
+            if (items.Contains(item))
+            {
+                Debug.LogFormat("adding item to machine: {0}", item);
+                
+                inputInventory.Add(item);
+                items.Remove(item);
+                break;
+            }
+        }
+        
+        UpdateDisplay();
+        
+        return items;
+    }
+
 
     public void UpdateDisplay()
     {
@@ -138,6 +176,12 @@ public class Machine : Interactable
     private void Craft()
     {
         outputInventory.Add(outputItem);
+        
+        //create small poof effect
+        Instantiate(Resources.Load("Prefabs/SmallPoofEffect"), transform.position, Quaternion.identity);
+        
+        isCrafting = false;
+
         UpdateDisplay();
     }
 

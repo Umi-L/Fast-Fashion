@@ -10,7 +10,7 @@ public class DroppedItem : MonoBehaviour
     
     Player player;
     
-    float pickupTime = 0.5f;
+    float pickupTime = 1.5f;
     
     // Start is called before the first frame update
     void Start()

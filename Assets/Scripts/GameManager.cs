@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = System.Random;
 
 public class GameManager : MonoBehaviour
@@ -16,20 +18,37 @@ public class GameManager : MonoBehaviour
 
     private Player player;
 
-    private Quota[][] quotas =
+    [FormerlySerializedAs("GUI")] public GameObject HUD;
+    
+    public float timeLimit;
+
+    private bool roundOver = false;
+    
+    private Round[] quotas =
     {
-        new Quota[]
+        new Round()
         {
-            new () {count = 2, item = Items.CraftingItem.Jeans},
-            new () {count = 5, item = Items.CraftingItem.Cloth},
-            new () {count = 1, item = Items.CraftingItem.Shirt}
+            quotas = new[]{
+                new Quota() { count = 2, item = Items.CraftingItem.Jeans },
+                new Quota() { count = 1, item = Items.CraftingItem.LeatherWallet },
+                new Quota() { count = 2, item = Items.CraftingItem.Button },
+            },
+            timeLimit = 120.0f
         },
     };
+
+    private int currentStage = 0;
 
     struct Quota
     {
         public int count;
         public Items.CraftingItem item;
+    }
+
+    struct Round
+    {
+        public Quota[] quotas;
+        public float timeLimit;
     }
     
     private void Awake() 
@@ -51,10 +70,27 @@ public class GameManager : MonoBehaviour
         areaBounds = GameObject.FindWithTag("AreaBounds").GetComponent<Renderer>();
         
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
+
+        HUD = GameObject.FindWithTag("HUD");
+
+        UpdateQuotaDisplay();
+        
+        timeLimit = quotas[currentStage].timeLimit;
     }
 
     private void Update()
     {
+        //quota countdown
+        timeLimit -= Time.deltaTime;
+
+        if (timeLimit <= 0)
+        {
+            EndRound();
+        }
+
+        UpdateTimerDisplay();
+        
+        //cat spawning
         catSpawnTimer += Time.deltaTime;
         if (catSpawnTimer > catSpawnTime)
         {
@@ -62,7 +98,130 @@ public class GameManager : MonoBehaviour
             SpawnCat();
         }
     }
+
+    private void UpdateQuotaDisplay()
+    {
+        var todo = HUD.transform.GetChild(0).GetChild(1).GetComponent<TMPro.TextMeshProUGUI>();
+
+        todo.text = "TODO:\n";
+        
+        foreach (var quota in quotas[currentStage].quotas)
+        {
+
+            var prefix = "";
+            var suffix = "";
+            
+            if (quota.count == 0)
+            {
+                prefix = "<S>";
+                suffix = "</S>";
+            }
+            
+            todo.text += prefix + quota.item + ": " + quota.count + suffix + "\n";
+        }
+    }
     
+    public void UpdateTimerDisplay()
+    {
+        if (roundOver) return;
+        var timer = HUD.transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
+        timer.text = FloatToTime(timeLimit);
+    }
+    
+    public string FloatToTime(float time)
+    {
+        var minutes = Mathf.FloorToInt(time / 60);
+        var seconds = Mathf.FloorToInt(time % 60);
+        return string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    public void EndRound()
+    {
+        if (roundOver) return;
+
+        roundOver = true;
+        
+        print("ROUND END");
+        
+        //loop through quotas and check if all counts are 0
+        var allDone = true;
+        foreach (var quota in quotas[currentStage].quotas)
+        {
+            if (quota.count > 0)
+            {
+                allDone = false;
+                break;
+            }
+        }
+        
+        if (allDone)
+        {
+            print("ALL DONE");
+            var cheque = HUD.transform.GetChild(0).GetChild(3);
+            cheque.gameObject.SetActive(true);
+            cheque.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = "$" + (currentStage + 1) * 100;
+        }
+        else
+        {
+            print("NOT DONE");
+        }
+    }
+
+    public void ReturnToMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+
+    public List<Items.CraftingItem> DropoffItems(List<Items.CraftingItem> items)
+    {
+        bool itemDroppedOff = false;
+        
+        //find items in quota and remove them. return remaining items
+        var remainingItems = items;
+        for (int i=0; i < items.Count; i++)
+        {
+            var item = items[i];
+
+            //for loop through quotas[currentStage]
+            for (int j=0; j < quotas[currentStage].quotas.Length; j++)
+            {
+                var quota = quotas[currentStage].quotas[j];
+                
+                if (quota.item == item && quota.count > 0)
+                {
+                    quotas[currentStage].quotas[j].count--;
+                    remainingItems.Remove(item);
+                    
+                    itemDroppedOff = true;
+                }
+            }
+        }
+        
+        if (itemDroppedOff)
+        {
+            Instantiate(Resources.Load("Prefabs/RewardEffect"), player.transform.position, Quaternion.identity);
+        }
+        
+        bool allDone = true;
+        foreach (var quota in quotas[currentStage].quotas)
+        {
+            if (quota.count > 0)
+            {
+                allDone = false;
+                break;
+            }
+        }
+
+        if (allDone)
+        {
+            EndRound();
+        }
+        
+        UpdateQuotaDisplay();
+        
+        return remainingItems;
+    }
+
     private void SpawnCat()
     {
         

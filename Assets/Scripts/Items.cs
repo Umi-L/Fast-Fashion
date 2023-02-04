@@ -22,6 +22,7 @@ public class Items
         BlueCloth,
         YellowCloth,
         HoodieString,
+        LeatherWallet,
         
         // Crafted Three Layers
         Hoodie,
@@ -82,6 +83,8 @@ public class Items
                 return Resources.Load<GameObject>("Items/Shorts");
             case CraftingItem.Skirt:
                 return Resources.Load<GameObject>("Items/Skirt");
+            case CraftingItem.LeatherWallet:
+                return Resources.Load<GameObject>("Items/Wallet");
             default:
                 return null;
         }

@@ -10,11 +10,15 @@ public class BasicMachine : Machine
     [SerializeField]
     public Sprite WantedItems;
     public Sprite OutputItem;
+    public Sprite Recipe;
 
     private GameObject inputDisplay;
     private GameObject outputDisplay;
     private GameObject interactableDisplay;
     private GameObject progressDisplay;
+    private GameObject recipeDisplay;
+
+    private Image recipeImage;
 
     private GameObject player;
     
@@ -24,6 +28,7 @@ public class BasicMachine : Machine
         outputDisplay = transform.GetChild(1).gameObject;
         interactableDisplay = transform.GetChild(2).gameObject;
         progressDisplay = transform.GetChild(3).GetChild(0).gameObject;
+        recipeDisplay = transform.GetChild(3).GetChild(1).gameObject;
 
         //inputDisplay.GetComponent<SpriteRenderer>().sprite = WantedItems;
         //outputDisplay.GetComponent<SpriteRenderer>().sprite = OutputItem;
@@ -34,17 +39,32 @@ public class BasicMachine : Machine
         outputDisplay.transform.GetChild(0).rotation = camRotation;
         interactableDisplay.transform.GetChild(0).rotation = camRotation;
         progressDisplay.transform.rotation = camRotation;
+        recipeDisplay.transform.rotation = camRotation;
 
         player = GameObject.FindWithTag("Player");
         
         base.HideAllInteractionPoints();
+            
+        recipeImage = recipeDisplay.GetComponent<UnityEngine.UI.Image>();
+            
+        recipeImage.sprite = Recipe;
+        recipeImage.SetNativeSize();
     }
 
     private void Update()
     {
         base.UpdateTimer();
         
-        progressDisplay.GetComponent<Image>().fillAmount = base.GetCraftingProgress();
+        var progress = base.GetCraftingProgress();
+        progressDisplay.GetComponent<Image>().fillAmount = progress;
+        if (progress == 0)
+        {
+            recipeDisplay.SetActive(true);
+        }
+        else
+        {
+            recipeDisplay.SetActive(false);
+        }
     }
 
     public override void Interact(int point)

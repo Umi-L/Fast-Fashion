@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
         // if the camera is too far away, move it closer
         Vector3 distance = ((followerCamera.transform.position - offset) - transform.position);
         
-        if (Mathf.Abs(distance.x) > 7 || Mathf.Abs(distance.z) > 5)
+        if (Mathf.Abs(distance.x) > 6 || Mathf.Abs(distance.z) > 4)
         {
             followerCamera.transform.position = Vector3.Lerp(followerCamera.transform.position, transform.position + offset, 1*Time.deltaTime);
         }
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
         {
             var droppedItemPrefab = Resources.Load<GameObject>("Prefabs/DroppedItem");
             var droppedItem = Instantiate(droppedItemPrefab);
-            droppedItem.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
+            droppedItem.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(0f,1f), Random.Range(0f,1f),Random.Range(0f,1f)) * 5, ForceMode.Impulse);
             droppedItem.transform.position = transform.position + new Vector3(0, 2, 0);
             droppedItem.GetComponent<DroppedItem>().itemType = item;
         }
@@ -144,6 +144,7 @@ public class Player : MonoBehaviour
             itemPrefab.transform.SetParent(head.transform);
 
             itemPrefab.transform.localPosition = new Vector3(0, height, 0);
+            itemPrefab.transform.localRotation = Quaternion.identity;
             
             height += combinedBounds.size.y + 0.5f;
         }

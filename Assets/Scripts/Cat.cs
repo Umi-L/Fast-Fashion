@@ -28,6 +28,9 @@ public class Cat : MonoBehaviour
         lifespan -= Time.deltaTime;
         if (lifespan < 0)
         {
+            var poof = Instantiate(Resources.Load("Prefabs/PoofEffect")) as GameObject;
+            poof.transform.position = transform.position;
+            
             Destroy(gameObject);
         }
         
@@ -38,6 +41,11 @@ public class Cat : MonoBehaviour
             if (distance < 1.5f)
             {
                 player.DropAllItems();
+                
+                // instantiate Poof game object
+                var poof = Instantiate(Resources.Load("Prefabs/PoofEffect")) as GameObject;
+                poof.transform.position = transform.position;
+                
                 Destroy(gameObject);
             }
         }

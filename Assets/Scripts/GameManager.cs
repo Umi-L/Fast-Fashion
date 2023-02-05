@@ -54,6 +54,38 @@ public class GameManager : MonoBehaviour
             },
             timeLimit = 180.0f
         },
+        new Round()
+        {
+            quotas = new[]{
+                new Quota() { count = 1, item = Items.CraftingItem.LeatherBag },
+                new Quota() { count = 2, item = Items.CraftingItem.Hoodie },
+                new Quota() { count = 2, item = Items.CraftingItem.Sweatpants },
+                new Quota() { count = 4, item = Items.CraftingItem.Button },
+            },
+            timeLimit = 210.0f
+        },
+        new Round()
+        {
+            quotas = new[]{
+                new Quota() { count = 1, item = Items.CraftingItem.Pyjamas },
+                new Quota() { count = 2, item = Items.CraftingItem.Hoodie },
+                new Quota() { count = 2, item = Items.CraftingItem.Jeans },
+                new Quota() { count = 2, item = Items.CraftingItem.YellowCloth },
+            },
+            timeLimit = 210.0f
+        },
+        new Round()
+        {
+            quotas = new[]{
+                new Quota() { count = 1, item = Items.CraftingItem.LeatherWallet },
+                new Quota() { count = 2, item = Items.CraftingItem.Pyjamas },
+                new Quota() { count = 2, item = Items.CraftingItem.Jeans },
+                new Quota() { count = 3, item = Items.CraftingItem.LeatherBag },
+                new Quota() { count = 4, item = Items.CraftingItem.Hoodie },
+                new Quota() { count = 4, item = Items.CraftingItem.YellowCloth },
+            },
+            timeLimit = 300.0f
+        },
     };
     
     

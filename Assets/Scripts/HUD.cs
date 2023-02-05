@@ -16,6 +16,12 @@ public class HUD : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
     
+    public void LoadTutorial()
+    {
+        //unity load main menu
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Tutorial");
+    }
+    
     public void NextLevel()
     {
         //if last level

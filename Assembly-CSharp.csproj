@@ -43,6 +43,7 @@
   <ItemGroup>
      <Compile Include="Assets/QuickOutline/Scripts/Outline.cs" />
      <Compile Include="Assets/Scripts/PickupLocation.cs" />
+     <Compile Include="Assets/Scripts/TurnTable.cs" />
      <Compile Include="Assets/Scripts/Interactable.cs" />
      <Compile Include="Assets/Scripts/ButtonMaker.cs" />
      <Compile Include="Assets/Scripts/Items.cs" />

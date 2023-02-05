@@ -821,8 +821,8 @@ MonoBehaviour:
   - {fileID: 1477740633653437134}
   - {fileID: 5185415646762446173}
   - {fileID: 8144202930347320345}
-  inputs: 
-  outputItem: 0
+  inputs: 0000000000000000
+  outputItem: 14
   craftingTime: 5
   toggleable: 0
   toggled: 1

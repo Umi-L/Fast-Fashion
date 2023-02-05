@@ -1212,8 +1212,8 @@ MonoBehaviour:
   InteractionPoints:
   - {fileID: 1080062951290227844}
   - {fileID: 5649886828598469354}
-  inputs: 
-  outputItem: 0
+  inputs: 0900000009000000
+  outputItem: 13
   craftingTime: 5
   toggleable: 0
   toggled: 1

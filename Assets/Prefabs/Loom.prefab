@@ -678,8 +678,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractionPoints:
   - {fileID: 1192450049513326713}
-  inputs: 
-  outputItem: 0
+  inputs: 03000000
+  outputItem: 4
   craftingTime: 5
   toggleable: 0
   toggled: 0

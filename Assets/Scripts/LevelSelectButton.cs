@@ -12,7 +12,7 @@ public class LevelSelectButton : MonoBehaviour
         var button = transform.GetChild(0);
         button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => {
             //unity load level index
-            UnityEngine.SceneManagement.SceneManager.LoadScene(levelIndex);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("level" + levelIndex);
         });
         
         button.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = "level" + levelIndex;

@@ -72,7 +72,7 @@ public class Items
             case CraftingItem.Jacket:
                 return Resources.Load<Sprite>("Icons/Outlines/JacketIcon");
             case CraftingItem.LeatherBag:
-                return Resources.Load<Sprite>("Icons/Outlines/LeatherBagIcon");
+                return Resources.Load<Sprite>("Icons/Outlines/LeatherBag");
             case CraftingItem.Pyjamas:
                 return Resources.Load<Sprite>("Icons/Outlines/PyjamasIcon");
             case CraftingItem.Shirt:

@@ -28,7 +28,7 @@ public class Cat : MonoBehaviour
         lifespan -= Time.deltaTime;
         if (lifespan < 0)
         {
-            var poof = Instantiate(Resources.Load("Prefabs/PoofEffect")) as GameObject;
+            var poof = Instantiate(Resources.Load("Prefabs/SmallPoofEffect")) as GameObject;
             poof.transform.position = transform.position;
             
             Destroy(gameObject);

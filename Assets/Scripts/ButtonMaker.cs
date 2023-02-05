@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class ButtonMaker : Machine
@@ -13,6 +14,7 @@ public class ButtonMaker : Machine
     private GameObject inputDisplay;
     private GameObject progressDisplay;
     private GameObject recipeDisplay;
+    private GameObject hasItemDisplay;
 
     private Image recipeImage;
 
@@ -23,6 +25,7 @@ public class ButtonMaker : Machine
         inputDisplay = transform.GetChild(0).gameObject;
         progressDisplay = transform.GetChild(1).GetChild(0).gameObject;
         recipeDisplay = transform.GetChild(1).GetChild(1).gameObject;
+        hasItemDisplay = transform.GetChild(1).GetChild(2).gameObject;
 
         //inputDisplay.GetComponent<SpriteRenderer>().sprite = WantedItems;
         //outputDisplay.GetComponent<SpriteRenderer>().sprite = OutputItem;
@@ -32,15 +35,20 @@ public class ButtonMaker : Machine
         inputDisplay.transform.GetChild(0).rotation = camRotation;
         progressDisplay.transform.rotation = camRotation;
         recipeDisplay.transform.rotation = camRotation;
+        hasItemDisplay.transform.rotation = camRotation;
 
         player = GameObject.FindWithTag("Player");
         
         base.HideAllInteractionPoints();
             
-        recipeImage = recipeDisplay.GetComponent<UnityEngine.UI.Image>();
+        /*recipeImage = recipeDisplay.GetComponent<UnityEngine.UI.Image>();
             
         recipeImage.sprite = Recipe;
-        recipeImage.SetNativeSize();
+        recipeImage.SetNativeSize();*/
+        
+        hasItemDisplay.SetActive(false);
+        
+        base.UpdateRecipePreview(recipeDisplay);
     }
 
     private void Update()
@@ -56,6 +64,15 @@ public class ButtonMaker : Machine
         else
         {
             recipeDisplay.SetActive(false);
+        }
+        
+        if (base.outputInventory.Count > 0)
+        {
+            hasItemDisplay.SetActive(true);
+        }
+        else
+        {
+            hasItemDisplay.SetActive(false);
         }
     }
 

@@ -45,10 +45,13 @@ public class BasicMachine : Machine
         
         base.HideAllInteractionPoints();
             
-        recipeImage = recipeDisplay.GetComponent<UnityEngine.UI.Image>();
+        /*recipeImage = recipeDisplay.GetComponent<UnityEngine.UI.Image>();
             
         recipeImage.sprite = Recipe;
-        recipeImage.SetNativeSize();
+        recipeImage.SetNativeSize();*/
+        
+        base.UpdateRecipePreview(recipeDisplay);
+        
     }
 
     private void Update()

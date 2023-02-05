@@ -54,9 +54,11 @@
      <Compile Include="Assets/Scripts/PostProcessingReload.cs" />
      <Compile Include="Assets/Scripts/Dropoff.cs" />
      <Compile Include="Assets/Scripts/Player.cs" />
+     <Compile Include="Assets/Scripts/RecipeTemplate.cs" />
      <Compile Include="Assets/Scripts/GameManager.cs" />
      <Compile Include="Assets/Scripts/Cat.cs" />
      <Folder Include="Assets" />
+     <Folder Include="Assets/Sounds" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <Folder Include="Assets/QuickOutline/Resources" />
      <Folder Include="Assets/QuickOutline/Resources/Materials" />
@@ -70,7 +72,9 @@
      <Folder Include="Assets/QuickOutline/Samples" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc" />
      <Folder Include="Assets/Scripts" />
+     <Folder Include="Assets/Scenes/Levels" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF SSD.shader" />
+     <Folder Include="Assets/Scenes/MainMenu" />
      <Folder Include="Assets/TextMesh Pro/Resources" />
      <None Include="Assets/QuickOutline/Resources/Shaders/OutlineMask.shader" />
      <Folder Include="Assets/QuickOutline" />
@@ -81,6 +85,7 @@
      <None Include="Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF.shader" />
+     <Folder Include="Assets/Resources/Icons/Outlines" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile SSD.shader" />
      <None Include="Assets/TextMesh Pro/Resources/LineBreaking Leading Characters.txt" />
      <Folder Include="Assets/Models" />
@@ -91,6 +96,7 @@
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Surface.cginc" />
      <Folder Include="Assets/TextMesh Pro/Shaders" />
      <Folder Include="Assets/TextMesh Pro/Resources/Style Sheets" />
+     <Folder Include="Assets/Resources/Icons/old" />
      <Folder Include="Assets/QuickOutline/Resources/Shaders" />
      <Folder Include="Assets/TextMesh Pro/Fonts" />
      <Folder Include="Assets/Resources/Prefabs" />
@@ -98,6 +104,7 @@
      <Folder Include="Assets/QuickOutline/Samples/Materials" />
      <Folder Include="Assets/Scenes/SampleScene_Profiles" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Masking.shader" />
+     <Folder Include="Assets/Scenes/Level1" />
      <Folder Include="Assets/QuickOutline/Scripts" />
      <Folder Include="Assets/Prefabs" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF Overlay.shader" />
@@ -109,6 +116,7 @@
      <Folder Include="Assets/Models/Items" />
      <Folder Include="Assets/TextMesh Pro/Documentation" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader" />
+     <Folder Include="Assets/Scenes/SampleScene" />
      <Folder Include="Assets/Textures" />
      <Folder Include="Assets/Resources" />
      <None Include="Assets/TextMesh Pro/Sprites/EmojiOne.json" />

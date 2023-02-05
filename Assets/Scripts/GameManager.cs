@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     
     public float timeLimit;
 
-    private bool roundOver = false;
+    public bool roundOver = false;
     
     private Round[] quotas =
     {
@@ -35,9 +35,30 @@ public class GameManager : MonoBehaviour
             },
             timeLimit = 120.0f
         },
+        new Round()
+        {
+            quotas = new[]{
+                new Quota() { count = 1, item = Items.CraftingItem.Sweatpants },
+                new Quota() { count = 2, item = Items.CraftingItem.Jeans },
+                new Quota() { count = 4, item = Items.CraftingItem.Button },
+            },
+            timeLimit = 120.0f
+        },
+        new Round()
+        {
+            quotas = new[]{
+                new Quota() { count = 1, item = Items.CraftingItem.Pyjamas },
+                new Quota() { count = 1, item = Items.CraftingItem.Hoodie },
+                new Quota() { count = 1, item = Items.CraftingItem.Sweatpants },
+                new Quota() { count = 2, item = Items.CraftingItem.RedCloth },
+            },
+            timeLimit = 180.0f
+        },
     };
+    
+    
 
-    private int currentStage = 0;
+    public int currentStage = 0;
 
     struct Quota
     {
@@ -135,6 +156,12 @@ public class GameManager : MonoBehaviour
         return string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+    public void RestartLevel()
+    {
+        //unity load current level
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
+    
     public void EndRound()
     {
         if (roundOver) return;
@@ -160,10 +187,20 @@ public class GameManager : MonoBehaviour
             var cheque = HUD.transform.GetChild(0).GetChild(3);
             cheque.gameObject.SetActive(true);
             cheque.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = "$" + (currentStage + 1) * 100;
+            
+            GameObject.FindWithTag("MusicLoop").GetComponent<AudioSource>().Stop();
+            
+            GetComponents<AudioSource>()[0].Play();
         }
         else
         {
             print("NOT DONE");
+            var cheque = HUD.transform.GetChild(0).GetChild(4);
+            cheque.gameObject.SetActive(true);
+            
+            GameObject.FindWithTag("MusicLoop").GetComponent<AudioSource>().Stop();
+
+            GetComponents<AudioSource>()[1].Play();
         }
     }
 

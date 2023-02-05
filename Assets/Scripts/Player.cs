@@ -21,6 +21,10 @@ public class Player : MonoBehaviour
     float interactionDistance = 3.0f;
 
     private GameObject head;
+    
+    private bool sneezing = false;
+    private float sneezeTime = 0.5f;
+    private float sneezeTimer = 0f;
 
     private Interactable lastFrameInteractable;
     private int lastFrameInteractionPoint = -1;
@@ -41,6 +45,29 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.roundOver)
+        {
+            return;
+        }
+
+        if (transform.position.y < -20)
+        {
+            GameManager.Instance.RestartLevel();
+        }
+        
+        if (sneezing)
+        {
+            sneezeTimer += Time.deltaTime;
+            if (sneezeTimer > sneezeTime)
+            {
+                sneezeTimer = 0;
+                sneezing = false;
+                animator.SetBool("sneezing", false);
+            }
+
+            return;
+        }
+        
 
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -109,6 +136,11 @@ public class Player : MonoBehaviour
 
     public void DropAllItems()
     {
+        sneezing = true;
+        animator.SetBool("sneezing", true);
+        
+        GetComponent<AudioSource>().Play();
+
         foreach (var item in inventory)
         {
             var droppedItemPrefab = Resources.Load<GameObject>("Prefabs/DroppedItem");

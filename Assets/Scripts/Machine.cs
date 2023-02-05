@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Machine : Interactable
 {
@@ -13,7 +14,7 @@ public class Machine : Interactable
     public float craftingTime = 5f;
     public bool toggleable = false;
     
-    private bool toggled = false;
+    public bool toggled = false;
     
     public bool isCrafting = false;
     
@@ -68,6 +69,75 @@ public class Machine : Interactable
     {
         return craftingTimer / craftingTime;
     }
+
+    public void UpdateRecipePreview(GameObject parent)
+    {
+        //clear parent children
+        foreach (Transform child in parent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        // get amount of each item in inputItems
+        Dictionary<Items.CraftingItem, int> itemCounts = new Dictionary<Items.CraftingItem, int>();
+        foreach (var item in inputs)
+        {
+            if (itemCounts.ContainsKey(item))
+            {
+                itemCounts[item]++;
+            }
+            else
+            {
+                itemCounts.Add(item, 1);
+            }
+        }
+        
+        
+        float offset = 0f;
+        float padding = 0.1f;
+        // for each dict item make a new RecipeTemplate object from resources
+        foreach (var item in itemCounts)
+        {
+            var recipeTemplate = Instantiate((GameObject) Resources.Load("Prefabs/RecipeTemplate"), parent.transform);
+            recipeTemplate.GetComponent<RecipeTemplate>().SetItem(item.Key, item.Value);
+            
+            //set position
+            recipeTemplate.transform.localPosition = new Vector3(offset, 0f, 0f);
+            
+            //add renderer width to offset
+            offset += recipeTemplate.transform.GetChild(0).GetComponent<RectTransform>().rect.width + padding;
+        }
+        
+        //add arrow
+        var arrow = Instantiate((GameObject) Resources.Load("Prefabs/Arrow"), parent.transform);
+        arrow.transform.localPosition = new Vector3(offset, 0f, 0f);
+        var arrowimage = arrow.transform.GetChild(0).GetComponent<RectTransform>();
+        offset += (arrowimage.rect.width * arrow.transform.localScale.x) + padding*4;
+        
+        //add output item
+        var outputTemplate = Instantiate((GameObject) Resources.Load("Prefabs/RecipeTemplate"), parent.transform);
+        outputTemplate.GetComponent<RecipeTemplate>().SetItem(outputItem, 1);
+        
+        //set position
+        outputTemplate.transform.localPosition = new Vector3(offset, 0f, 0f);
+
+        //center items in parent
+        foreach (Transform child in parent.transform)
+        {
+            child.localPosition -= new Vector3(offset/2, 0, 0);
+        }
+        
+        //set each element opacity to 50% on its image compnent
+        foreach (Transform child in parent.transform)
+        {
+            Image image = child.GetChild(0).GetComponent<Image>();
+            var tempColor = image.color;
+            tempColor.a = 0.8f;
+            image.color = tempColor;
+        }
+
+        parent.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+    }
     
     public List<Items.CraftingItem> AddItems(List<Items.CraftingItem> items)
     {
@@ -97,6 +167,8 @@ public class Machine : Interactable
         Debug.LogFormat("adding items to machine: {0}", items.Count);
         
         //check if inputs contains items if so add them
+
+        bool itemAdded = false;
         
         for (int i = inputs.Length-1; i >= 0; i--)
         {
@@ -107,8 +179,16 @@ public class Machine : Interactable
                 
                 inputInventory.Add(item);
                 items.Remove(item);
+                
+                itemAdded = true;
+                
                 break;
             }
+        }
+
+        if (itemAdded)
+        {
+            GetComponent<AudioSource>().Play();
         }
         
         UpdateDisplay();
@@ -203,6 +283,11 @@ public class Machine : Interactable
         outputInventory.Clear();
         
         UpdateDisplay();
+
+        if (copy.Count > 0)
+        {
+            GetComponent<AudioSource>().Play();
+        }
         
         return copy;
     }

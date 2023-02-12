@@ -13,6 +13,11 @@ public class TurnTable : MonoBehaviour
 
     private void Start()
     {
+        if (Descriptions.Length <= 0)
+        {
+            return;
+        }
+        
         DescriptionText.text = Descriptions[currentIndex];
 
         Instantiate(Objects[currentIndex], transform);
